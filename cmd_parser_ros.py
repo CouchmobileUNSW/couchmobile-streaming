@@ -2,6 +2,18 @@ import socket
 import twitch
 import time
 
+# Config for commands to receive from chat
+
+# Config for commands to send to the couch
+cmds = {'1' :'1',
+        '2' :'2',
+        '3' :'3',
+        '4' :'4',
+        '5' :'5',
+        '6' :'6',
+        '7' :'7'
+        }
+
 SERVER = "irc.chat.twitch.tv"
 PORT = 6667
 PASS = "oauth:164qv5hw70adstvlkikg2uca0f7cw4"
@@ -47,16 +59,17 @@ def Console(line):
     else:
         return True
 
-cmds = [1, 2, 3, 4, 5, 6, 7]
-cmds = [str(x) for x in cmds]
 # Parses the input cmdString and maps it to a command character
 # This is for cases where commands are not characters: e.g. "STOP" maps to 'x'
 def parseCmd(cmdString):
-    if cmdString in cmds:
-        return cmdString
-    else:
+    cmd = None
+    try:
+        cmd = cmds[cmdString]
+    except KeyError:
         return None
-
+    else:
+        return cmd
+    
 # Sends the command over to the couch controller program
 # TODO
 def sendCmd(cmd):
