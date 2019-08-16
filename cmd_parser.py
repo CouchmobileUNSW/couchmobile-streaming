@@ -27,5 +27,16 @@ class CmdWriter:
     def __init__(self):
         if not os.path.exists(_pipeName):
             os.mkfifo(_pipeName)
-        pipe = os.open(_pipeName, os.O_WRONLY)
-        break
+        _pipe = os.open(_pipeName, os.O_WRONLY)
+        
+
+    def sendCmd(self, cmdString):
+        cmd = self.parseCmd(cmdString)
+        os.write(_pipe, cmd)
+        
+
+    # This function takes in a command string from the chat and converts it
+    # into a recognizable command as recognized internally with cmdReader/Writer
+    def parseCmd(self, cmdString):
+        cmd = None
+        return cmd
