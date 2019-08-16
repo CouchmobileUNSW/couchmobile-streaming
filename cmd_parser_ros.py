@@ -2,9 +2,8 @@ import socket
 import twitch
 import time
 
-# Config for commands to receive from chat
-
-# Config for commands to send to the couch
+# Config for commands to receive from chat (left side) and send to couch (right)
+# "chat command" : "couch command"
 cmds = {'1' :'1',
         '2' :'2',
         '3' :'3',
@@ -13,6 +12,10 @@ cmds = {'1' :'1',
         '6' :'6',
         '7' :'7'
         }
+
+# Config for admin commands by twitch chat
+adminUsers = ["myrustybanana"]
+adminCmds = ["killbot", "killcouch"]
 
 SERVER = "irc.chat.twitch.tv"
 PORT = 6667
@@ -80,7 +83,8 @@ joinchat()
 
 
 # TODO implement taking a consensus for each unique vote on what to do
-while True:
+running = True
+while running:
     try:
         readbuffer = irc.recv(1024).decode()
     except:
@@ -95,6 +99,11 @@ while True:
             cmd = parseCmd(message)
             if cmd:
                 sendCmd(cmd)
+
+            if user in adminUsers:
+                if message in adminCmds:
+                    if message == "killbot":
+                        running = False
 
         if "PING" in line and Console(line):
             msgg = "PONG tmi.twitch.tv\r\n".encode()
