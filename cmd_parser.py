@@ -15,9 +15,15 @@ DEFAULT_PIPE_NAME = "twitch_inputs"
 
 class CmdReader:
     _pipeName = DEFAULT_PIPE_NAME
+    _pipe = None
     
     def __init__(self):
-        break
+        _pipe = open(_pipeName, 'r')
+        
+        # Discard all previous commands in the file
+
+    def read(self):
+
 
 
 class CmdWriter:
@@ -30,13 +36,13 @@ class CmdWriter:
         _pipe = os.open(_pipeName, os.O_WRONLY)
         
 
-    def sendCmd(self, cmdString):
-        cmd = self.parseCmd(cmdString)
+    def send(self, cmdString):
+        cmd = self.parse(cmdString)
         os.write(_pipe, cmd)
         
 
     # This function takes in a command string from the chat and converts it
     # into a recognizable command as recognized internally with cmdReader/Writer
-    def parseCmd(self, cmdString):
+    def parse(self, cmdString):
         cmd = None
         return cmd
