@@ -1,5 +1,6 @@
 import socket
 import twitch
+import time
 
 SERVER = "irc.chat.twitch.tv"
 PORT = 6667
@@ -46,8 +47,26 @@ def Console(line):
     else:
         return True
 
+cmds = [1, 2, 3, 4, 5, 6, 7]
+cmds = [str(x) for x in cmds]
+# Parses the input cmdString and maps it to a command character
+# This is for cases where commands are not characters: e.g. "STOP" maps to 'x'
+def parseCmd(cmdString):
+    if cmdString in cmds:
+        return cmdString
+    else:
+        return None
+
+# Sends the command over to the couch controller program
+# TODO
+def sendCmd(cmd):
+    print("Sending command: %s" % cmd)
+    return
+
 joinchat()
 
+
+# TODO implement taking a consensus for each unique vote on what to do
 while True:
     try:
         readbuffer = irc.recv(1024).decode()
@@ -60,8 +79,13 @@ while True:
             user = getUser(line)
             message = getMessage(line)
             print(user + " : " + message)
+            cmd = parseCmd(message)
+            if cmd:
+                sendCmd(cmd)
+
         if "PING" in line and Console(line):
             msgg = "PONG tmi.twitch.tv\r\n".encode()
             irc.send(msgg)
             print(msgg)
             continue
+        time.sleep(0.05) # Sleep in seconds 
